@@ -1,0 +1,31 @@
+<div class="chat-container">
+  <div class="chat__header">
+    <mat-icon>menu</mat-icon>
+    <span>NeoTalk</span>
+    <mat-icon>photo_camera</mat-icon>
+  </div>
+
+  <div class="chat__content">
+
+    <div class="chat__content__video">
+      <pose-viewer src="" id="example" loop="true"></pose-viewer>
+    </div>
+
+    <div class="chat__content__text">
+      <div class="chat__content__text__input">
+        <button matTextPrefix mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <input [(ngModel)]="message" type="text" placeholder="Digite para traduzir">
+        <button (click)="translateText()" class="chat__content__text__input__btn-send" matTextSuffix mat-icon-button>
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+      <div class="chat__content__text__mic">
+        <button matTextPrefix mat-icon-button>
+          <mat-icon>mic</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

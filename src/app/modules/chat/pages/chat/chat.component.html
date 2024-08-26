@@ -8,7 +8,12 @@
   <div class="chat__content">
 
     <div class="chat__content__video">
-      <pose-viewer src="" id="example" loop="true"></pose-viewer>
+      @if(!(loadingContent)){
+        <pose-viewer src="" id="example" loop="true" />
+      }@else{
+        <mat-spinner></mat-spinner>
+      }
+
     </div>
 
     <div class="chat__content__text">
@@ -22,9 +27,15 @@
         </button>
       </div>
       <div class="chat__content__text__mic">
-        <button matTextPrefix mat-icon-button>
-          <mat-icon>mic</mat-icon>
-        </button>
+          @if(isListening){
+            <button matTextPrefix mat-icon-button (click)="stopListening()">
+              <mat-icon>stop</mat-icon>
+            </button>
+          }@else{
+            <button matTextPrefix mat-icon-button (click)="startListening()">
+              <mat-icon>mic</mat-icon>
+            </button>
+          }
       </div>
     </div>
   </div>

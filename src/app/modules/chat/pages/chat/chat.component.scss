@@ -1,8 +1,8 @@
 .chat-container{
   height: 100vh;
-  background-color: green;
   display: flex;
   flex-direction: column;
+  background-color: #deedf4;
 
   .chat__header{
     padding: 16px;
@@ -19,13 +19,12 @@
 
   .chat__content{
     position: relative;
-    background-color:red;
     height: 100%;
     width: 100%;
+    display: flex;
 
     &__video {
-      background-color: white;
-      height: 100%;
+      margin-top: 80px;
     }
 
     &__text {
@@ -39,7 +38,6 @@
       justify-content: center;
 
       &__input{
-        border: 3px solid red;
         width: 100%;
         background-color: rgba(41, 65, 128, 0.91);
         display: flex;

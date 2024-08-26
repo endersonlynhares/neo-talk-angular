@@ -7,6 +7,8 @@ import {MatFormField, MatInput, MatLabel, MatPrefix, MatSuffix} from "@angular/m
 import {MatIcon} from "@angular/material/icon";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconButton} from "@angular/material/button";
+import {MatProgressSpinner, MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {PoseViewer} from "pose-viewer/dist/types/components/pose-viewer/pose-viewer";
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import {MatIconButton} from "@angular/material/button";
     NgOptimizedImage,
     MatLabel,
     MatIconButton,
-    MatSuffix
+    MatSuffix,
+    MatProgressSpinnerModule,
+
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -15,7 +15,7 @@ export class ChatComponent implements OnInit {
   chatForm: any;
   poseArrayBuffer: any;
   message: string = '';
-  poseUrl: SafeResourceUrl | null = null;
+  poseUrl: any = null;
   poseViewer: any;
   recognition: any;
   transcript: string = '';
@@ -36,15 +36,14 @@ export class ChatComponent implements OnInit {
     }
 
     this.recognition = new SpeechRecognition();
-    this.recognition.continuous = true; // Permite que o reconhecimento continue
-    this.recognition.interimResults = false; // Resultados intermediários não são retornados
+    this.recognition.continuous = true;
+    this.recognition.interimResults = false;
 
     this.recognition.onresult = (event: any) => {
       this.ngZone.run(() => {
-        // Obter o último resultado
         const result = event.results[event.resultIndex];
         this.transcript = result[0].transcript;
-        this.message += this.transcript; // Adiciona a transcrição à mensagem
+        this.message += this.transcript;
       });
     };
 
@@ -69,16 +68,20 @@ export class ChatComponent implements OnInit {
   stopListening() {
     this.isListening = false;
     this.recognition.stop();
+    this.loadingContent = true
     this.poseService.getPoseData(this.message).subscribe({
       next: (data) =>{
         this.poseData = URL.createObjectURL(data)
+        console.log(URL.createObjectURL(data))
         this.poseViewer.setAttribute('src', this.poseData)
+        console.log(this.poseViewer)
       },
       error: (err) =>{
         console.log(err)
       },
       complete: () =>{
         this.transcript = ''
+        this.loadingContent = false
       }
     })
   }
@@ -93,7 +96,6 @@ export class ChatComponent implements OnInit {
       }
     });
   }
-
 
   translateText() {
     if (!this.message) return;

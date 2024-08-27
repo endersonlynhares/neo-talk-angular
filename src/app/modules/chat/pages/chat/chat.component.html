@@ -8,10 +8,9 @@
   <div class="chat__content">
 
     <div class="chat__content__video">
-      @if(!(loadingContent)){
         <pose-viewer src="" id="example" loop="true" />
-      }@else{
-        <mat-spinner></mat-spinner>
+      @if(loadingContent){
+          <mat-spinner></mat-spinner>
       }
 
     </div>
@@ -21,18 +20,18 @@
         <button matTextPrefix mat-icon-button>
           <mat-icon>more_vert</mat-icon>
         </button>
-        <input [(ngModel)]="message" type="text" placeholder="Digite para traduzir">
-        <button (click)="translateText()" class="chat__content__text__input__btn-send" matTextSuffix mat-icon-button>
+        <textarea [(ngModel)]="message" type="text" placeholder="Digite para traduzir"></textarea>
+        <button (click)="stopListening()" class="chat__content__text__input__btn-send" matTextSuffix mat-icon-button>
           <mat-icon>send</mat-icon>
         </button>
       </div>
       <div class="chat__content__text__mic">
           @if(isListening){
-            <button matTextPrefix mat-icon-button (click)="stopListening()">
+            <button [disableRipple]="true" mat-icon-button (click)="stopListening()">
               <mat-icon>stop</mat-icon>
             </button>
           }@else{
-            <button matTextPrefix mat-icon-button (click)="startListening()">
+            <button [disableRipple]="true" mat-icon-button (click)="startListening()">
               <mat-icon>mic</mat-icon>
             </button>
           }

@@ -1,7 +1,4 @@
 import {Component, NgZone, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import * as PoseViewer from 'pose-viewer'
 import {PoseService} from "../../../../services/pose.service";
 
 @Component({
@@ -11,7 +8,6 @@ import {PoseService} from "../../../../services/pose.service";
 })
 export class ChatComponent implements OnInit {
   poseData: any;
-
   chatForm: any;
   poseArrayBuffer: any;
   message: string = '';
@@ -23,8 +19,6 @@ export class ChatComponent implements OnInit {
   isListening: boolean = false;
 
   constructor(
-    private httpClient: HttpClient,
-    private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private poseService: PoseService
   ) {
@@ -69,12 +63,21 @@ export class ChatComponent implements OnInit {
     this.isListening = false;
     this.recognition.stop();
     this.loadingContent = true
-    this.poseService.getPoseData(this.message).subscribe({
-      next: (data) =>{
-        this.poseData = URL.createObjectURL(data)
-        console.log(URL.createObjectURL(data))
-        this.poseViewer.setAttribute('src', this.poseData)
-        console.log(this.poseViewer)
+
+    this.poseService.getPoseVideo(this.message).subscribe({
+      next: (response) => {
+        this.poseViewer.setAttribute('src', response)
+        this.poseViewer.load()
+        this.poseViewer.play()
+
+        fetch(response)
+        .then(response => response.blob())
+        .then(blob => {
+          const videoBlobUrl = URL.createObjectURL(blob);
+          const a = document.querySelector(".button_download") as HTMLAnchorElement
+          a.href = videoBlobUrl;
+          a.download = 'pose_video.mp4';
+        })
       },
       error: (err) =>{
         console.log(err)
@@ -88,43 +91,10 @@ export class ChatComponent implements OnInit {
 
   async ngOnInit() {
     await customElements.whenDefined('pose-viewer').then(() => {
-      const poseViewer = document.querySelector('pose-viewer#example');
+      const poseViewer = document.querySelector('#pose_viewer') as HTMLVideoElement;
       if (poseViewer) {
-        console.log(poseViewer);
-        poseViewer.setAttribute('src', `https://us-central1-sign-mt.cloudfunctions.net/spoken_text_to_signed_pose?spoken=pt&signed=psr&text=Olá, tudo bem?`);
         this.poseViewer = poseViewer;
       }
     });
   }
-
-  translateText() {
-    if (!this.message) return;
-    this.poseViewer.setAttribute('src', `https://us-central1-sign-mt.cloudfunctions.net/spoken_text_to_signed_pose?spoken=pt&signed=psr&text=${this.message}`)
-    this.message = ''
-    this.transcript = ''
-    // this.httpClient.get(`https://sign.mt/api/v1/spoken-text-to-signed-pose?spoken=pt&signed=psr&text=${this.message}`,
-    //   {
-    //     headers: {
-    //     'Authorization': `${atob('TmVvVGFsa18yVWRYdVI5RWZnZ05hTm45cW5ZVHlWckp2YnB2UnN5cE5udkplS3Z4Q0E4b1E0')}`
-    //     },
-    //     responseType: 'arraybuffer'
-    //   })
-    //   .subscribe({
-    //     next: (response: any) => {
-    //       //response é um arraybuffer
-    //       //criar um arquivo .pose a partir do arraybuffer
-    //       const blob = new Blob([response], { type: 'application/octet-stream' });
-    //       console.log(blob);
-    //
-    //       //criar uma url para o arquivo .pose
-    //       this.poseUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-    //       console.log(this.poseUrl);
-    //     },
-    //     error: (error: any) => {
-    //       console.error(error);
-    //     }
-    //   });
-  }
-
-  protected readonly console = console;
 }

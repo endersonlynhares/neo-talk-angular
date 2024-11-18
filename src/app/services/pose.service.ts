@@ -7,7 +7,7 @@ import { catchError, filter, interval, last, map, of, switchMap, takeWhile, thro
 })
 export class PoseService {
 
-  private BASE_URL = "api"
+  private BASE_URL = "/api"
 
   constructor(
     private http: HttpClient
